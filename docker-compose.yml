@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./app/data:/srv/app/data
+    # Only needed if LLM_PROVIDER=ollama: inside the container "localhost"
+    # refers to the container itself, not the host machine running Ollama.
+    # This maps the special hostname below to the host's IP so
+    # OLLAMA_HOST=http://host.docker.internal:11434 in .env resolves correctly.
+    # (Not needed at all when LLM_PROVIDER=groq — the simpler default.)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://api:8000
+    depends_on:
+      - api
