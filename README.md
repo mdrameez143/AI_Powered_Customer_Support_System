@@ -1,4 +1,4 @@
-# Support Ticket AI
+# AI Powered Customer Support System
 
 An AI-powered system for querying and monitoring a customer support
 ticket dataset in natural language, with rule-based anomaly detection.
